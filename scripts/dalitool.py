@@ -57,7 +57,8 @@ def main():
 
     # clusternap order
     if args.treeorder:
-        df = treeorder(df)
+        raise NotImplementedError("Tree order is not implemented!")
+        # df = treeorder(df)
 
     # Pfam annotation if requested
     if args.annotate:
