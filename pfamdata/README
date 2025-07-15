@@ -1,0 +1,6 @@
+Pfam_38.0 data:
+
+Pfam-A.hmm.h3* = presshmm-generated indexing for hmmsearch
+Pfam_data.tsv = clan to pfam mappring and other Pfam information of Pfam entries
+*.clan_hmmer_tc.tsv = DALI identifiers mapped to Pfams
+

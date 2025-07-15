@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "your-package"
+version = "0.1.0"
+authors = [{ name = "Your Name", email = "your@email.com" }]
+description = "Your package does something useful"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["your_package"]
+
+[tool.setuptools]
+include-package-data = true
+# setup.py (if you're using it)
+from setuptools import setup, find_packages
+
+setup(
+    name="your-package",
+    packages=find_packages(),
+    include_package_data=True,
+    ...
+)

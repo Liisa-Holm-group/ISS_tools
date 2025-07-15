@@ -1,0 +1,37 @@
+# Job: test
+# Query: 6vg5A
+# No:  Chain   Z    rmsd lali nres  %id PDB  Description
+   1:  6vg5-A 15.4  0.0   81    81  100   MOLECULE: CAPSID PREMEMBRANE PROTEIN;                                
+   2:  1sfk-A 10.1  1.3   70    73   37   MOLECULE: CORE PROTEIN;                                              
+   3:  7ywq-A  6.6  2.9   70    79   11   MOLECULE: GENOME POLYPROTEIN;                                        
+   4:  6uqf-A  3.4  4.0   59   531    7   MOLECULE: POTASSIUM/SODIUM HYPERPOLARIZATION-ACTIVATED CYCL          
+
+# Structural equivalences
+   1: 6vg5-A 6vg5-A     1 -  81 <=>    1 -  81   (MET   20  - ARG  100  <=> MET   20  - ARG  100 )                          
+   2: 6vg5-A 1sfk-A     9 -  15 <=>    1 -   7   (GLN   28  - SER   34  <=> LEU   24  - LYS   30 )                          
+   2: 6vg5-A 1sfk-A    16 -  19 <=>   10 -  13   (LEU   35  - LEU   38  <=> MET   33  - LEU   36 )                          
+   2: 6vg5-A 1sfk-A    20 -  78 <=>   15 -  73   (GLN   39  - ARG   97  <=> ASP   38  - ARG   96 )                          
+   3: 6vg5-A 7ywq-A     9 -  14 <=>    1 -   6   (GLN   28  - PHE   33  <=> VAL   17  - ALA   22 )                          
+   3: 6vg5-A 7ywq-A    15 -  18 <=>   11 -  14   (SER   34  - MET   37  <=> GLN   27  - VAL   30 )                          
+   3: 6vg5-A 7ywq-A    22 -  39 <=>   15 -  32   (ARG   41  - THR   58  <=> GLN   31  - ALA   48 )                          
+   3: 6vg5-A 7ywq-A    40 -  81 <=>   36 -  77   (ILE   59  - ARG  100  <=> THR   52  - LYS   93 )                          
+   4: 6vg5-A 6uqf-A     1 -  15 <=>  456 - 470   (MET   20  - SER   34  <=> ARG  560  - GLU  574 )                          
+   4: 6vg5-A 6uqf-A    23 -  37 <=>  475 - 489   (GLY   42  - PHE   56  <=> MET  579  - ARG  593 )                          
+   4: 6vg5-A 6uqf-A    38 -  43 <=>  491 - 496   (LEU   57  - THR   62  <=> GLY  595  - ILE  600 )                          
+   4: 6vg5-A 6uqf-A    46 -  50 <=>  498 - 502   (ILE   65  - TRP   69  <=> LEU  602  - GLN  606 )                          
+   4: 6vg5-A 6uqf-A    54 -  71 <=>  514 - 531   (LYS   73  - ARG   90  <=> GLU  618  - ALA  635 )                          
+
+# Translation-rotation matrices
+-matrix  "6vg5-A 6vg5-A  U(1,.)   1.000000 -0.000000  0.000000           -0.000000"
+-matrix  "6vg5-A 6vg5-A  U(2,.)   0.000000  1.000000 -0.000000           -0.000000"
+-matrix  "6vg5-A 6vg5-A  U(3,.)  -0.000000  0.000000  1.000000            0.000000"
+-matrix  "6vg5-A 1sfk-A  U(1,.)   0.602471 -0.756709 -0.253811           73.332024"
+-matrix  "6vg5-A 1sfk-A  U(2,.)   0.785582  0.506016  0.356102          -52.224365"
+-matrix  "6vg5-A 1sfk-A  U(3,.)  -0.141033 -0.413930  0.899317          -17.454784"
+-matrix  "6vg5-A 7ywq-A  U(1,.)  -0.873146 -0.381314 -0.303670           18.905050"
+-matrix  "6vg5-A 7ywq-A  U(2,.)   0.486664 -0.717448 -0.498423            9.078397"
+-matrix  "6vg5-A 7ywq-A  U(3,.)  -0.027812 -0.582982  0.812009           12.601116"
+-matrix  "6vg5-A 6uqf-A  U(1,.)   0.091289  0.232542 -0.968293           74.054787"
+-matrix  "6vg5-A 6uqf-A  U(2,.)   0.117860 -0.968041 -0.221370          162.130127"
+-matrix  "6vg5-A 6uqf-A  U(3,.)  -0.988825 -0.093914 -0.115778          238.104935"
+
