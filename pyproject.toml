@@ -1,27 +1,22 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "your-package"
+name = "ISS_tools"
 version = "0.1.0"
-authors = [{ name = "Your Name", email = "your@email.com" }]
-description = "Your package does something useful"
+description = "Tools for parsing and annotating ISS/DALI output using Pfam"
 readme = "README.md"
 requires-python = ">=3.7"
-dependencies = []
+authors = [{name="Liisa Holm", email="liisa.holm@helsinki.fi"}]
+dependencies = ["pandas"]
+
+[project.scripts]
+pfamtool = "ISS_tools.pfamtool:main"
 
 [tool.setuptools.packages.find]
-where = ["your_package"]
+where = ["ISS_tools"]
+include = ["ISS_tools", "ISS_tools.*"]
 
 [tool.setuptools]
 include-package-data = true
-# setup.py (if you're using it)
-from setuptools import setup, find_packages
-
-setup(
-    name="your-package",
-    packages=find_packages(),
-    include_package_data=True,
-    ...
-)
