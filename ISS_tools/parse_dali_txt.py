@@ -220,7 +220,7 @@ def main():
     df = dali_txt_to_df(args.dali_txt, args.dat1, args.dat2, TARGET=args.target)
     
     # Uncomment the next line if pileup data should be added
-    add_pileup(df)
+    #add_pileup(dfi,nres)
 
     df.to_csv(sys.stdout, sep='\t', index=False)
 
