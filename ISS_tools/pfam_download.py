@@ -79,7 +79,7 @@ def download_pfam(pfamdir):
             print("Error: hmmpress failed. Make sure HMMER is installed and in your PATH.")
 
     # Parse the gzipped file
-    df = parse_all_gf_blocks_from_gzip("Pfam-A.hmm.dat.gz")
+    df = parse_all_gf_blocks_from_gzip(os.path.join(pfamdir,"Pfam-A.hmm.dat.gz"))
     outfile = pfamdir / 'Pfam_data.tsv'
     df.to_csv(outfile, sep='\t', index=False)
     print(f"Wrote Pfam data to {outfile}")
