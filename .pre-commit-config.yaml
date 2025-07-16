@@ -1,0 +1,9 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.3
+    hooks:
+      - id: ruff-check
+        types_or: [ python, pyi ] # This is to ignore formatting jupyter notebooks. Remove this to format all files
+        args: [ --fix ]
+      - id: ruff-format
+        types_or: [ python, pyi ]
