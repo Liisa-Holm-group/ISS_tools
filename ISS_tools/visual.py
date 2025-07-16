@@ -12,8 +12,7 @@ from pathlib import Path
 import importlib
 import itertools
 
-from scipy.cluster.hierarchy import linkage, fcluster
-from scipy.spatial.distance import pdist, squareform
+
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -22,6 +21,7 @@ from ISS_tools.parse_dali_txt import pileup
 from ISS_tools.pfam_io import write_FASTA
 
 # Third-party packages
+import_install('scipy')
 import_install('numpy')
 import_install('matplotlib')
 import_install('pandas')
@@ -29,6 +29,9 @@ import_install('seaborn')
 import_install('logomaker')
 import_install('PIL')
 import_install('bitstring')
+
+from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.spatial.distance import pdist, squareform
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
