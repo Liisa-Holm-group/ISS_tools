@@ -9,3 +9,27 @@ Converts raw DALI output (from the standalone versions or the DALI web server) i
 Assigns Pfam domains to query proteins or aligned segments using profile HMMs via HMMER. Annotations may reflect the full domain architecture (one-to-many) or a simplified one-to-one mapping restricted to the structurally aligned regions.
 3. **Visualization Module** (ISS_tools/visual.py)
 Provides functions for static and interactive plots—including scatter plots, heatmaps, and sequence logos—to support interpretation of annotated structural alignment data. Visualizations are designed to highlight relationships between structure, function, and domain composition.
+
+
+
+
+## Development:
+
+Ruff and pre-commit were added to the repository to keep the code cleaner. Ruff will clean the code while pre-commit will ensure that ruff is run with every git commit command. Pre-commit will reject the commit if ruff finds issues that it cannot fix.
+
+Install ruff and pre-commit with
+```bash
+pip install -e .[dev]
+pre-commit install
+```
+
+You can also check (and format) all files with:
+```bash
+pre-commit run --all-files
+```
+
+
+If you want to make a commit without verifying the code, run git commit with the --no-verify flag
+```bash
+ git commit -m [MESSAGE] --no-verify
+```
