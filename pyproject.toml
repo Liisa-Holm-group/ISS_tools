@@ -20,3 +20,13 @@ include = ["ISS_tools", "ISS_tools.*"]
 
 [tool.setuptools]
 include-package-data = true
+
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.12.3",
+  "pre-commit>=4.2.0",
+]
+
+[tool.ruff]
+format.quote-style = "double" # Change this to "single" to have strings with ' sign instead.
