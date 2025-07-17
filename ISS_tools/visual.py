@@ -12,7 +12,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from ISS_tools.helpers import import_install
 from ISS_tools.parse_dali_txt import pileup
-
+from ISS_tools.helpers import fit_line
+from ISS_tools.pfam_io import write_FASTA
 # Third-party packages
 import_install("scipy")
 import_install("numpy")
