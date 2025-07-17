@@ -291,6 +291,8 @@ def pileup(qs, ss, le, txt, nres):
 
 
 def add_pileup(df):
+    # automatically deterine nres as lngest 'sequ-pileup' string
+    nres = df['sequ-pileup'].astype(str).str.len().max()
     # generate pileups
     df["sequ-pileup"] = df.apply(
         lambda row: pileup(
@@ -328,7 +330,7 @@ def main():
     df = dali_txt_to_df(args.dali_txt, args.dat1, args.dat2, TARGET=args.target)
 
     # Uncomment the next line if pileup data should be added
-    # add_pileup(dfi,nres)
+    add_pileup(df)
 
     df.to_csv(sys.stdout, sep="\t", index=False)
 
