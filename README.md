@@ -34,7 +34,7 @@ Provides functions for static and interactive plots—including scatter plots, h
 
 1. Examples of DALI output conversion and Pfam assignment can be found in the [tests/README.md](tests/README.md).
 
-2. Templates for visualization workflows can be found in the [notebooks/](Jupyter Notebooks) (notebooks/demo1.ipynb and notebooks/demo2ipynb).
+2. Templates for visualization workflows can be found in the Jupyter Notebooks (notebooks/demo1.ipynb and notebooks/demo2ipynb).
 
 ---
 
