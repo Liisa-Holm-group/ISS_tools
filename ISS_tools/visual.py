@@ -11,9 +11,8 @@ import itertools
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from ISS_tools.helpers import import_install
-from ISS_tools.parse_dali_txt import pileup
-from ISS_tools.helpers import fit_line
-from ISS_tools.pfam_io import write_FASTA
+from ISS_tools.parse_dali_txt import add_pileup, determine_nres
+
 # Third-party packages
 import_install("scipy")
 import_install("numpy")
@@ -23,6 +22,7 @@ import_install("seaborn")
 import_install("logomaker")
 import_install("PIL")
 import_install("bitstring")
+import_install("plotly")
 
 from scipy.cluster.hierarchy import linkage
 from scipy.spatial.distance import pdist
@@ -33,7 +33,6 @@ import pandas as pd
 import seaborn as sns
 import logomaker as lm
 
-import_install("plotly")
 import plotly.graph_objects as go
 import plotly.io as pio
 
@@ -69,43 +68,6 @@ def read_dali_tsv(tsvfile):
     ]
     df = pd.read_csv(tsvfile, sep="\t", header=None, names=dali_tsv_colnames)
     print(f"Read {df.shape[0]} rows with {df.shape[1]} columns from {tsvfile}")
-    return df
-
-
-def cleaning(df):
-    # lowercase cols
-    df.columns = [col.lower() for col in df.columns]
-    # integers
-    for col in ("ali-length", "sbjct-length"):
-        df[col] = (
-            pd.to_numeric(df[col], errors="coerce").astype("Int64").fillna(0)
-        )  # nullable integer type
-    # create pileups if issing
-    nres = df.loc[df["database"] == "Query", "sbjct-length"].values[0]
-    if "sbjct-coverage" not in df.columns:
-        df["query-coverage"] = df["ali-length"] / nres
-        df["sbjct-coverage"] = df["ali-length"] / nres
-    # create coverages if issing
-    if "dssp-pileup" not in df.columns:
-        df["dssp-pileup"] = df.apply(
-            lambda row: pileup(
-                row["qstarts"], row["sstarts"], row["lengths"], row["sbjct-dssp"], nres
-            ),
-            axis=1,
-        )
-        df["sequ-pileup"] = df.apply(
-            lambda row: pileup(
-                row["qstarts"],
-                row["sstarts"],
-                row["lengths"],
-                row["sbjct-sequence"],
-                nres,
-            ),
-            axis=1,
-        )
-    # floats
-    for col in ("z-score", "rmsd", "query-coverage", "sbjct-coverage", "seq-identity"):
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
     return df
 
 
@@ -165,12 +127,16 @@ class DALIFrame:
         """
         Load TSV file and preprocess it.
         """
-        self._df = cleaning(pd.read_csv(tsvfile, sep="\t"))
+        self._df = pd.read_csv(tsvfile, sep="\t")
         self._standardize_columns()
         return self  # allow chaining
 
     def grouplabel(self, k=10, labelin="clan", labelout="hue"):
         """sort df by z-score, use top k labels, unassigned and pool others"""
+        if not labelin in self._df.columns:
+            print("Undefined column: ",labelin)
+            print("Setting ",labelin, " to unassigned")
+            self._df[labelin]="unassigned"
         unique_clans = (
             self._df.sort_values("z-score", ascending=False)[labelin]
             .dropna()
@@ -180,11 +146,28 @@ class DALIFrame:
         for x in unique_clans[:k]:
             print("assign", x)
             self._df.loc[self._df[labelin] == x, labelout] = self._df[labelin]
-
+    
     def _standardize_columns(self):
         """
         Internal method to lowercase column names and clean up the DataFrame.
         """
+        # lowercase cols
+        self._df.columns = [col.lower() for col in self._df.columns]
+        # integers
+        for col in ("ali-length", "sbjct-length"):
+            self._df[col] = (
+                pd.to_numeric(self._df[col], errors="coerce").astype("Int64").fillna(0)
+            )  # nullable integer type
+        
+        # create pileups if missing
+        if "dssp-pileup" not in self._df.columns: self._df = add_pileup(self._df)
+
+        # create coverages if issing
+        if "sbjct-coverage" not in self._df.columns:
+            nres = determine_nres(self._df)
+            self._df["query-coverage"] = self._df["ali-length"] / nres
+            self._df["sbjct-coverage"] = self._df["ali-length"] / nres
+        
         # Columns to convert and their desired types
         columns_to_convert = {
             "z-score": float,
@@ -205,8 +188,9 @@ class DALIFrame:
         self._df["ali-length"] = self._df["ali-length"].replace(0, min_ali_len)
 
         # Fill missing Pfam and Clan annotations
-        self._df["pfam"] = self._df["pfam"].astype(object).fillna("unassigned")
-        self._df["clan"] = self._df["clan"].astype(object).fillna("unassigned")
+        if "pfam" in self._df.columns:
+            self._df["pfam"] = self._df["pfam"].astype(object).fillna("unassigned")
+            self._df["clan"] = self._df["clan"].astype(object).fillna("unassigned")
 
         # Generate hovertext depending on available columns
         if "accession" in self._df.columns and "description" in self._df.columns:
@@ -371,6 +355,13 @@ class DALIFrame:
                 size=size,
             )
         return
+    def write_FASTA(self, id_col="sbjct", seq_col="sbjct-sequence", outfile="full.fasta"):
+        "write sbjct, sequence in FASTA format"
+        # write FASTA file
+        df_clean = self._df.dropna()
+        with open(outfile, "w") as f:
+            for _, row in df_clean.iterrows():
+                f.write(f">{row[id_col]}\n{row[seq_col]}\n")
 
 
 def _is_categorical(series):

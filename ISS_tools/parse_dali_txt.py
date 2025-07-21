@@ -290,9 +290,49 @@ def pileup(qs, ss, le, txt, nres):
     return "".join(res)
 
 
+import pandas as pd
+import ast
+
+def determine_nres(df: pd.DataFrame):
+    """
+    Determine the value of nres from a DataFrame using one of three rules:
+
+    1. If 'database' column contains 'Query', return 'sbjct-length' from that row.
+    2. Else if 'sequ-pileup' column exists, return max length of strings in that column.
+    3. Else if 'qstarts' and 'lengths' columns exist, return max of rightmost qstart + rightmost length.
+
+    Returns:
+        int or None: Computed nres value or None if none of the criteria are met.
+    """
+    if 'database' in df.columns and (df['database'] == 'Query').any():
+        return df.loc[df['database'] == 'Query', 'sbjct-length'].iloc[0]
+
+    elif 'sequ-pileup' in df.columns:
+        return df['sequ-pileup'].dropna().map(len).max()
+
+    elif 'qstarts' in df.columns and 'lengths' in df.columns:
+        def extract_rightmost_sum(qs, ls):
+            try:
+                q = ast.literal_eval(qs)
+                l = ast.literal_eval(ls)
+                if q and l:
+                    return q[-1] + l[-1]
+            except Exception:
+                pass
+            return None
+
+        return df.dropna(subset=['qstarts', 'lengths'])\
+                 .apply(lambda row: extract_rightmost_sum(row['qstarts'], row['lengths']), axis=1)\
+                 .max()
+
+    else:
+        return None
+
+
 def add_pileup(df):
     # automatically deterine nres as lngest 'sequ-pileup' string
-    nres = df['sequ-pileup'].astype(str).str.len().max()
+    #nres = df['sequ-pileup'].astype(str).str.len().max()
+    nres = determine_nres(df)
     # generate pileups
     df["sequ-pileup"] = df.apply(
         lambda row: pileup(
