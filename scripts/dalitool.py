@@ -7,7 +7,7 @@ import pandas as pd
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from ISS_tools.pfam_hmmsearch import add_pfam_annotation
-from ISS_tools.parse_dali_txt import dali_txt_to_df
+from ISS_tools.parse_dali_txt import dali_txt_to_df, seriate
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
         default="USER",
         help="Name of target database (optional with --parse)",
     )
-    parser.add_argument("--treeorder", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--seriate", action="store_true", help="Reorder rows prettily (slow on big data setes)")
     parser.add_argument(
         "--pfamdir", help="Path to HMM profile library (required with --annotate)"
     )
@@ -70,15 +70,13 @@ def main():
         infile.close()
 
     # clusternap order
-    if args.treeorder:
-        raise NotImplementedError("Tree order is not implemented!")
-        # df = treeorder(df)
+    if args.seriate:
+        df = seriate(df)
 
     # Pfam annotation if requested
     if args.annotate:
         if not args.pfamdir:
             sys.exit("Error: --pfamdir required with --annotate")
-        df = pd.read_csv(args.infile, sep="\t")
         df = add_pfam_annotation(df, "sequ-pileup", args.pfamdir)
 
     # Output

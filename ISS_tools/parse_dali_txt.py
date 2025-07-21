@@ -4,6 +4,38 @@ import re
 import os.path
 import numpy as np
 import pandas as pd
+import bitstring
+
+
+def nearest_neighbor_reordering(matrix):
+    "greedy quadratic seriation algorithm"
+    n_rows = len(matrix)
+    if n_rows<1: return([])
+    # bitvector distances
+    sim = np.array([ [ (a&b).count(1) for a in matrix ] for b in matrix ],dtype=int)
+    #print(distances)
+    visited = [False] * n_rows
+    order = [0]  # Start with the first row
+    visited[0] = True
+    for _ in range(1, n_rows):
+        last = order[-1]
+        next_row = np.argmax([sim[last, j] if not visited[j] else 0 for j in range(n_rows)])
+        order.append(next_row)
+        visited[next_row] = True
+    return(order)
+    
+
+def seriate(df):
+    "create dssp-order column"
+    # accept L/E (1), L/H (1), L/L (2), H/H (1), E/E (1)
+    code={'E':'10','H':'01','L':'11','.':'00','\n':'','*':''}
+    # convert pileup strings to bitstrings
+    atrix = list(df['dssp-pileup'])
+    matrix=[ bitstring.Bits(bin="".join([ code[x] for x in row ])) for row in atrix ]
+    # reorder
+    order=nearest_neighbor_reordering(matrix) # Query assumed on first row 
+    df['dssp-order'] = order
+    return(df)
 
 
 def get_cd1(fn):

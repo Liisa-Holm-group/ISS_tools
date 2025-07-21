@@ -40,3 +40,9 @@ python3 scripts/dalitool.py --parse --in tests/6vg5A.txt --out tests/6vg5A.dali.
 python3 scripts/dalitool.py --annotate --pfamdir pfamdata/ --in tests/6vg5A.dali.tsv --out tests/6vg5A.pf.tsv
 ```
 
+### chained --annotate and --seriate options
+```bash
+python3 scripts/dalitool.py --annotate --seriate --pfamdir pfamdata/ --in tests/6vg5A.dali.tsv --out tests/6vg5A.pf.tsv
+```
+
+
