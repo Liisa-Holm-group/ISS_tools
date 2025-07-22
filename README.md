@@ -12,8 +12,9 @@ Assigns Pfam domains to query proteins or aligned segments using profile HMMs vi
 3. **Visualization Module** (```ISS_tools/visual.py```)
 Provides functions for static and interactive plots—including scatter plots, heatmaps, and sequence logos—to support interpretation of annotated structural alignment data. Visualizations are designed to highlight relationships between structure, function, and domain composition.
 
+!(images/scatter.png)
+
 ---
-![scatterplot of annotated DALI hits](https://ekhidna2.biocenter.helsinki.fi/ISS_ProtSci/scatter.png)
 
 
 ### Installation
