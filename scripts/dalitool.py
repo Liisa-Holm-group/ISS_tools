@@ -36,7 +36,11 @@ def main():
         default="USER",
         help="Name of target database (optional with --parse)",
     )
-    parser.add_argument("--seriate", action="store_true", help="Reorder rows prettily (slow on big data setes)")
+    parser.add_argument(
+        "--seriate",
+        action="store_true",
+        help="Reorder rows prettily (slow on big data setes)",
+    )
     parser.add_argument(
         "--pfamdir", help="Path to HMM profile library (required with --annotate)"
     )
