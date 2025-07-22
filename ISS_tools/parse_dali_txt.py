@@ -5,37 +5,41 @@ import os.path
 import numpy as np
 import pandas as pd
 import bitstring
+import ast
 
 
 def nearest_neighbor_reordering(matrix):
     "greedy quadratic seriation algorithm"
     n_rows = len(matrix)
-    if n_rows<1: return([])
+    if n_rows < 1:
+        return []
     # bitvector distances
-    sim = np.array([ [ (a&b).count(1) for a in matrix ] for b in matrix ],dtype=int)
-    #print(distances)
+    sim = np.array([[(a & b).count(1) for a in matrix] for b in matrix], dtype=int)
+    # print(distances)
     visited = [False] * n_rows
     order = [0]  # Start with the first row
     visited[0] = True
     for _ in range(1, n_rows):
         last = order[-1]
-        next_row = np.argmax([sim[last, j] if not visited[j] else 0 for j in range(n_rows)])
+        next_row = np.argmax(
+            [sim[last, j] if not visited[j] else 0 for j in range(n_rows)]
+        )
         order.append(next_row)
         visited[next_row] = True
-    return(order)
-    
+    return order
+
 
 def seriate(df):
     "create dssp-order column"
     # accept L/E (1), L/H (1), L/L (2), H/H (1), E/E (1)
-    code={'E':'10','H':'01','L':'11','.':'00','\n':'','*':''}
+    code = {"E": "10", "H": "01", "L": "11", ".": "00", "\n": "", "*": ""}
     # convert pileup strings to bitstrings
-    atrix = list(df['dssp-pileup'])
-    matrix=[ bitstring.Bits(bin="".join([ code[x] for x in row ])) for row in atrix ]
+    atrix = list(df["dssp-pileup"])
+    matrix = [bitstring.Bits(bin="".join([code[x] for x in row])) for row in atrix]
     # reorder
-    order=nearest_neighbor_reordering(matrix) # Query assumed on first row 
-    df['dssp-order'] = order
-    return(df)
+    order = nearest_neighbor_reordering(matrix)  # Query assumed on first row
+    df["dssp-order"] = order
+    return df
 
 
 def get_cd1(fn):
@@ -110,7 +114,7 @@ def dali_txt_to_df(filename, dat1, dat2, TARGET="DB", verbose=False):
             # group lines by common id
             q = {}
             s = {}
-            l = {}
+            ll = {}
             lista = []
             for line in f:
                 if line.startswith("# Translation-rotation matrices"):
@@ -122,7 +126,7 @@ def dali_txt_to_df(filename, dat1, dat2, TARGET="DB", verbose=False):
                 if id not in q:
                     q[id] = []
                     s[id] = []
-                    l[id] = []
+                    ll[id] = []
                     lista.append(id)
                 x = line.split(":")
                 line = x[1]
@@ -132,12 +136,12 @@ def dali_txt_to_df(filename, dat1, dat2, TARGET="DB", verbose=False):
                 sfrom = int(line[31:35])
                 q[id].append(qfrom)
                 s[id].append(sfrom)
-                l[id].append(qto - qfrom + 1)
+                ll[id].append(qto - qfrom + 1)
             # write csv to qstarts[], sstarts[], lengths[] keeping input order
             for id in lista:
                 qstarts = list(q.values())
                 sstarts = list(s.values())
-                lengths = list(l.values())
+                lengths = list(ll.values())
             # u3b block
             # matrix  "2nrm-A 101m-A  U(1,.)  -0.753961  0.567882 -0.330232           27.728849"
             # matrix  "2nrm-A 101m-A  U(2,.)   0.240092 -0.229709 -0.943180            1.541300"
@@ -312,8 +316,8 @@ def pileup(qs, ss, le, txt, nres):
     res = ["."] * (nres)
     lentext = len(txt)
     if qstarts is not None:
-        for q, s, l in zip(qstarts, sstarts, lengths):
-            for i in range(-1, l - 1):
+        for q, s, ll in zip(qstarts, sstarts, lengths):
+            for i in range(-1, ll - 1):
                 if q + i >= nres:
                     break
                 if s + i >= lentext:
@@ -321,9 +325,6 @@ def pileup(qs, ss, le, txt, nres):
                 res[q + i] = txt[s + i]
     return "".join(res)
 
-
-import pandas as pd
-import ast
 
 def determine_nres(df: pd.DataFrame):
     """
@@ -336,26 +337,32 @@ def determine_nres(df: pd.DataFrame):
     Returns:
         int or None: Computed nres value or None if none of the criteria are met.
     """
-    if 'database' in df.columns and (df['database'] == 'Query').any():
-        return df.loc[df['database'] == 'Query', 'sbjct-length'].iloc[0]
+    if "database" in df.columns and (df["database"] == "Query").any():
+        return df.loc[df["database"] == "Query", "sbjct-length"].iloc[0]
 
-    elif 'sequ-pileup' in df.columns:
-        return df['sequ-pileup'].dropna().map(len).max()
+    elif "sequ-pileup" in df.columns:
+        return df["sequ-pileup"].dropna().map(len).max()
 
-    elif 'qstarts' in df.columns and 'lengths' in df.columns:
+    elif "qstarts" in df.columns and "lengths" in df.columns:
+
         def extract_rightmost_sum(qs, ls):
             try:
                 q = ast.literal_eval(qs)
-                l = ast.literal_eval(ls)
-                if q and l:
-                    return q[-1] + l[-1]
+                ll = ast.literal_eval(ls)
+                if q and ll:
+                    return q[-1] + ll[-1]
             except Exception:
                 pass
             return None
 
-        return df.dropna(subset=['qstarts', 'lengths'])\
-                 .apply(lambda row: extract_rightmost_sum(row['qstarts'], row['lengths']), axis=1)\
-                 .max()
+        return (
+            df.dropna(subset=["qstarts", "lengths"])
+            .apply(
+                lambda row: extract_rightmost_sum(row["qstarts"], row["lengths"]),
+                axis=1,
+            )
+            .max()
+        )
 
     else:
         return None
@@ -363,7 +370,7 @@ def determine_nres(df: pd.DataFrame):
 
 def add_pileup(df):
     # automatically deterine nres as lngest 'sequ-pileup' string
-    #nres = df['sequ-pileup'].astype(str).str.len().max()
+    # nres = df['sequ-pileup'].astype(str).str.len().max()
     nres = determine_nres(df)
     # generate pileups
     df["sequ-pileup"] = df.apply(
