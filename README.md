@@ -16,14 +16,6 @@ Provides functions for static and interactive plots—including scatter plots, h
 
 ---
 
-### Workflows
-
-Here is a more detailed list of modules that are offered by ISS_tools package. 
-
-![ISS_tools workflow table](./images/ISS_tools_workflows.png)
-
----
-
 ### Installation
 
 1. Running ISS_tools requires the installation of hmmer. Instructions can be found here [HMMER](http://hmmer.org/documentation.html).
@@ -52,6 +44,13 @@ Here is a more detailed list of modules that are offered by ISS_tools package.
 1. Examples of DALI output conversion and Pfam assignment can be found in the [tests/README.md](tests/README.md).
 
 2. Templates for visualization workflows can be found in the Jupyter Notebooks (notebooks/demo1.ipynb and notebooks/demo2ipynb).
+
+### Workflow Reference
+
+Below is an overview of the workflows supported by the ISS_tools package:
+
+![Table summarizing each ISS_tools script: purpose, inputs, and outputs](./images/ISS_tools_workflows.png)
+
 
 ---
 
