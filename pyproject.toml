@@ -32,5 +32,15 @@ dev = [
     "pre-commit>=2.21",
 ]
 
+visualization = [
+    "bitstring",
+    "logomaker",
+    "matplotlib",
+    "numpy",
+    "plotly",
+    "scipy",
+    "seaborn"
+]
+
 [tool.ruff]
 format.quote-style = "double" # Change this to "single" to have strings with ' sign instead.
