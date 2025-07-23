@@ -28,7 +28,7 @@ Provides functions for static and interactive plots—including scatter plots, h
     pip install .
     ```
 
-    Or for development (with linting & tests):
+    Or for development (with linting):
     ```bash
     pip install -e .[dev]
     ```
