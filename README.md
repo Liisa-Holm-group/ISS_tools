@@ -23,6 +23,8 @@ Provides functions for static and interactive plots—including scatter plots, h
 
 2. Install the project python dependencies with
     ```bash
+    python -m ensurepip
+    python -m pip install --upgrade pip
     pip install .
     ```
 
@@ -30,6 +32,11 @@ Provides functions for static and interactive plots—including scatter plots, h
     ```bash
     pip install -e .[dev]
     ```
+   
+   Or for visualizations:
+   ```bash
+   pip install -e .[visualization]
+   ```
 
 ---
 

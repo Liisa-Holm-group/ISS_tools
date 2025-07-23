@@ -5,8 +5,6 @@ setup(
     version="0.1.0",
     packages=find_packages(include=["ISS_tools", "ISS_tools.*"]),
     install_requires=[
-        "pandas",
-        # add any other dependencies here
     ],
     entry_points={
         "console_scripts": [

@@ -9,7 +9,11 @@ description = "Tools for parsing and annotating ISS/DALI output using Pfam"
 readme = "README.md"
 requires-python = ">=3.7"
 authors = [{name="Liisa Holm", email="liisa.holm@helsinki.fi"}]
-dependencies = ["pandas"]
+dependencies = [
+    "notebook>=6.5.7",
+    "pandas",
+    "pip"
+]
 
 [project.scripts]
 pfamtool = "ISS_tools.pfamtool:main"
@@ -26,6 +30,16 @@ include-package-data = true
 dev = [
     "ruff>=0.12.3",
     "pre-commit>=2.21",
+]
+
+visualization = [
+    "bitstring",
+    "logomaker",
+    "matplotlib",
+    "numpy",
+    "plotly",
+    "scipy",
+    "seaborn"
 ]
 
 [tool.ruff]

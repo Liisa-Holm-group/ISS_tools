@@ -3,9 +3,6 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from ISS_tools.helpers import import_install
-
-import_install("pandas")
 import pandas as pd
 
 

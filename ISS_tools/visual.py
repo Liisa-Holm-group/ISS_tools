@@ -8,22 +8,7 @@ import sys
 import itertools
 
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from ISS_tools.helpers import import_install
 from ISS_tools.parse_dali_txt import add_pileup, determine_nres
-
-# Third-party packages
-import_install("scipy")
-import_install("numpy")
-import_install("matplotlib")
-import_install("pandas")
-import_install("seaborn")
-import_install("logomaker")
-import_install("PIL")
-import_install("bitstring")
-import_install("plotly")
-
 from scipy.cluster.hierarchy import linkage
 from scipy.spatial.distance import pdist
 import numpy as np
@@ -35,6 +20,9 @@ import logomaker as lm
 
 import plotly.graph_objects as go
 import plotly.io as pio
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 
 pio.renderers.default = "notebook"  # or 'inline' or 'notebook_connected'
 
@@ -133,10 +121,10 @@ class DALIFrame:
 
     def grouplabel(self, k=10, labelin="clan", labelout="hue"):
         """sort df by z-score, use top k labels, unassigned and pool others"""
-        if not labelin in self._df.columns:
-            print("Undefined column: ",labelin)
-            print("Setting ",labelin, " to unassigned")
-            self._df[labelin]="unassigned"
+        if labelin not in self._df.columns:
+            print("Undefined column: ", labelin)
+            print("Setting ", labelin, " to unassigned")
+            self._df[labelin] = "unassigned"
         unique_clans = (
             self._df.sort_values("z-score", ascending=False)[labelin]
             .dropna()
@@ -146,7 +134,7 @@ class DALIFrame:
         for x in unique_clans[:k]:
             print("assign", x)
             self._df.loc[self._df[labelin] == x, labelout] = self._df[labelin]
-    
+
     def _standardize_columns(self):
         """
         Internal method to lowercase column names and clean up the DataFrame.
@@ -158,16 +146,17 @@ class DALIFrame:
             self._df[col] = (
                 pd.to_numeric(self._df[col], errors="coerce").astype("Int64").fillna(0)
             )  # nullable integer type
-        
+
         # create pileups if missing
-        if "dssp-pileup" not in self._df.columns: self._df = add_pileup(self._df)
+        if "dssp-pileup" not in self._df.columns:
+            self._df = add_pileup(self._df)
 
         # create coverages if issing
         if "sbjct-coverage" not in self._df.columns:
             nres = determine_nres(self._df)
             self._df["query-coverage"] = self._df["ali-length"] / nres
             self._df["sbjct-coverage"] = self._df["ali-length"] / nres
-        
+
         # Columns to convert and their desired types
         columns_to_convert = {
             "z-score": float,
@@ -355,7 +344,10 @@ class DALIFrame:
                 size=size,
             )
         return
-    def write_FASTA(self, id_col="sbjct", seq_col="sbjct-sequence", outfile="full.fasta"):
+
+    def write_FASTA(
+        self, id_col="sbjct", seq_col="sbjct-sequence", outfile="full.fasta"
+    ):
         "write sbjct, sequence in FASTA format"
         # write FASTA file
         df_clean = self._df.dropna()
@@ -506,7 +498,7 @@ def _scatter(
         norm = plt.Normalize(vmin=df[color].min(), vmax=df[color].max())
 
         if marker is None:
-            scatter = ax.scatter(
+            ax.scatter(
                 df[x],
                 df[y],
                 c=df[color],
@@ -627,7 +619,7 @@ def _scatter(
             )
             for cat in marker_vals
         ]
-        legend2 = ax.legend(handles=marker_legend, title=marker, loc="lower right")
+        ax.legend(handles=marker_legend, title=marker, loc="lower right")
 
     # Optionally set horizontal plot limits
     if left is not None:

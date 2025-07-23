@@ -1,55 +1,5 @@
 import sys
 import shutil
-import importlib
-
-
-def import_install(module_name):
-    """
-    Attempt to import a Python module by name; if missing, automatically install it and re-import.
-
-    Parameters
-    ----------
-    module_name : str
-        Name of the module to import and, if necessary, install via pip.
-
-    Behavior
-    --------
-    - Tries to import the specified module using `importlib`.
-    - If the module is not found (`ImportError`), attempts to install it using pip:
-      - If running inside a Jupyter environment, uses the `%pip install` magic command.
-      - Otherwise, runs `pip install` via a subprocess.
-    - After installation, tries to import the module again.
-    - Prints status messages indicating success or failure.
-
-    Notes
-    -----
-    - This function requires internet access and appropriate permissions to install packages.
-    - Designed to simplify dependencies management, especially in interactive environments.
-    """
-
-    try:
-        importlib.import_module(module_name)
-        print("success importing ", module_name)
-    except ImportError:
-        try:
-            print(f"Module '{module_name}' not found. Attempting to install...")
-            # Use %pip only in Jupyter; fallback otherwise
-            import IPython
-
-            ipy = IPython.get_ipython()
-            if ipy is not None:
-                ipy.run_line_magic("pip", f"install {module_name}")
-            else:
-                # fallback if not in Jupyter
-                import subprocess
-
-                subprocess.check_call(
-                    [sys.executable, "-m", "pip", "install", module_name]
-                )
-            # Try importing again after installation
-            importlib.import_module(module_name)
-        except Exception as e:
-            print(f"<U+274C> Failed to install or import '{module_name}': {e}")
 
 
 def validate_required_args(required_args, context):
