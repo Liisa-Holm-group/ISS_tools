@@ -73,6 +73,9 @@ def main():
     if infile is not sys.stdin:
         infile.close()
 
+    # lowercase cols
+    df.columns = [col.lower() for col in df.columns]
+
     # clusternap order
     if args.seriate:
         df = seriate(df)
