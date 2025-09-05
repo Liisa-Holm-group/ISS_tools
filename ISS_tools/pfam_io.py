@@ -1,7 +1,7 @@
 import os
 import re
 import glob
-
+from pathlib import Path
 import pandas as pd
 
 
@@ -31,6 +31,8 @@ def write_FASTA(df, id_col="sbjct", seq_col="sbjct-sequence", outfile="full.fast
     "write sbjct, sequence in FASTA format"
     # write FASTA file
     df_clean = df.dropna()
+    out = Path(outfile)
+    out.parent.mkdir(parents=True, exist_ok=True)
     with open(outfile, "w") as f:
         for _, row in df_clean.iterrows():
             f.write(f">{row[id_col]}\n{row[seq_col]}\n")

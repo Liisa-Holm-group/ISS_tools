@@ -82,6 +82,8 @@ def download_pfam(pfamdir):
     # Parse the gzipped file
     df = parse_all_gf_blocks_from_gzip(os.path.join(pfamdir, "Pfam-A.hmm.dat.gz"))
     outfile = pfamdir / "Pfam_data.tsv"
+    out = Path(outfile)
+    out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(outfile, sep="\t", index=False)
     print(f"Wrote Pfam data to {outfile}")
 

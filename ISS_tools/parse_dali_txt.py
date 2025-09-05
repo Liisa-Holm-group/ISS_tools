@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import bitstring
 import ast
+from pathlib import Path
 
 
 def nearest_neighbor_reordering(matrix):
@@ -411,6 +412,8 @@ def main():
     # Uncomment the next line if pileup data should be added
     add_pileup(df)
 
+    out = Path(sys.stdout)
+    out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(sys.stdout, sep="\t", index=False)
 
 
