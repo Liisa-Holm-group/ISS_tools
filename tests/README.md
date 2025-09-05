@@ -14,7 +14,7 @@ pfamtool --search tests/test.fasta --pfamdir pfamdata/ --out tests/pf-search.out
 
 ### --parse option; run hmmsearch separately
 ```bash
-hmmsearch --acc --noali --notextw --cut_tc -o tests/tmpout.txt /data/liisa/Pfam-A.hmm tests/test.fasta
+hmmsearch --acc --noali --notextw --cut_tc -o tests/tmpout.txt pfamdata/Pfam-A.hmm tests/test.fasta
 pfamtool --parse tests/tmpout.txt --out tests/pf-parse.out
 ```
 
