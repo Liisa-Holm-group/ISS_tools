@@ -4,6 +4,7 @@ import sys
 import os
 import subprocess
 import tempfile
+from pathlib import Path
 
 import pandas as pd
 
@@ -142,6 +143,8 @@ def pfam_scan(fasta_input, pfamdir, output_path, source_label=""):
     result = add_clan_annotation(parsed_df, pf.clan_file)
 
     print(f"Writing final results to {output_path}")
+    out = Path(output_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
     result.to_csv(output_path, sep="\t", index=False)
 
     if temp_created:
