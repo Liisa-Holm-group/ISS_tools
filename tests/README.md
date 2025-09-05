@@ -4,30 +4,30 @@
 
 ### no test: automatically fetches Pfam-A.hmm (big file) and Pfam-A.dat.gz
 ```bash
-python3 scripts/pfamtool.py --download --pfamdir pfamdata/
+pfamtool --download --pfamdir pfamdata/
 ```
 
 ### --search option
 ```bash
-python3 scripts/pfamtool.py --search tests/test.fasta --pfamdir pfamdata/ --out tests/pf-search.out
+pfamtool --search tests/test.fasta --pfamdir pfamdata/ --out tests/pf-search.out
 ```
 
 ### --parse option; run hmmsearch separately
 ```bash
-hmmsearch --acc --noali --notextw --cut_tc -o tests/tmpout.txt /data/liisa/Pfam-A.hmm tests/test.fasta
-python3 scripts/pfamtool.py --parse tests/tmpout.txt --out tests/pf-parse.out
+hmmsearch --acc --noali --notextw --cut_tc -o tests/tmpout.txt pfamdata/Pfam-A.hmm tests/test.fasta
+pfamtool --parse tests/tmpout.txt --out tests/pf-parse.out
 ```
 
 ### --update; providing small toy database
 ```bash
-python3 scripts/pfamtool.py --update --dat tests/DAT/ --pfamdir pfamdata/ --out tests/test.clan_hmmer_tc.tsv
+pfamtool --update --dat tests/DAT/ --pfamdir pfamdata/ --out tests/test.clan_hmmer_tc.tsv
 ```
 
 ## (2) tests of scripts/dalitool.py
 
 ### --parse option
 ```bash
-python3 scripts/dalitool.py --parse --in tests/6vg5A.txt --out tests/6vg5A.dali.tsv --dat1 tests/DAT --dat2 tests/DAT/
+dalitool --parse --in tests/6vg5A.txt --out tests/6vg5A.dali.tsv --dat1 tests/DAT --dat2 tests/DAT/
 ```
 
 ```text
@@ -37,12 +37,12 @@ python3 scripts/dalitool.py --parse --in tests/6vg5A.txt --out tests/6vg5A.dali.
 
 ### --annotate option
 ```bash
-python3 scripts/dalitool.py --annotate --pfamdir pfamdata/ --in tests/6vg5A.dali.tsv --out tests/6vg5A.pf.tsv
+dalitool --annotate --pfamdir pfamdata/ --in tests/6vg5A.dali.tsv --out tests/6vg5A.pf.tsv
 ```
 
 ### chained --annotate and --seriate options
 ```bash
-python3 scripts/dalitool.py --annotate --seriate --pfamdir pfamdata/ --in tests/6vg5A.dali.tsv --out tests/6vg5A.pf.tsv
+dalitool --annotate --seriate --pfamdir pfamdata/ --in tests/6vg5A.dali.tsv --out tests/6vg5A.pf.tsv
 ```
 
 

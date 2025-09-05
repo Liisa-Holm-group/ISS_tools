@@ -15,16 +15,21 @@ dependencies = [
     "pip"
 ]
 
-[project.scripts]
-pfamtool = "ISS_tools.pfamtool:main"
-
 [tool.setuptools.packages.find]
-where = ["ISS_tools"]
-include = ["ISS_tools", "ISS_tools.*"]
+where = ["."]
+include = ["ISS_tools"]
+
+[tool.setuptools.package-dir]
+"" = "scripts"
+ISS_tools = "ISS_tools"
+
+[project.scripts]
+pfamtool = "pfamtool:main"
+dalitool = "dalitool:main"
 
 [tool.setuptools]
+py-modules = ["pfamtool", "dalitool"]
 include-package-data = true
-
 
 [project.optional-dependencies]
 dev = [
