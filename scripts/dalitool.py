@@ -2,6 +2,8 @@
 import argparse
 import sys
 import os
+from pathlib import Path
+
 import pandas as pd
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -84,10 +86,10 @@ def main():
         df = add_pfam_annotation(df, "sequ-pileup", args.pfamdir)
 
     # Output
-    if args.outfile:
-        df.to_csv(args.outfile, sep="\t", index=False)
-    else:
-        df.to_csv(sys.stdout, sep="\t", index=False)
+    output_file = args.outfile or sys.stdout
+    out = Path(output_file)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_file, sep="\t", index=False)
 
 
 if __name__ == "__main__":

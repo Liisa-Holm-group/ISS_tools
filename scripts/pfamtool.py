@@ -32,6 +32,8 @@ def handle_parse(args):
     with open(args.parse, "r") as f:
         txt = f.readlines()
     df = parse_hmmer_output(txt)
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(args.out, sep="\t", index=False)
 
 
